@@ -1,20 +1,16 @@
 name: Deploy React to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages-deploy-main"
   cancel-in-progress: false
@@ -25,7 +21,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3 # Updated action version
+      uses: actions/checkout@v3
 
     - name: Detect package manager
       id: detect-package-manager
@@ -46,7 +42,7 @@ jobs:
         fi
 
     - name: Set up Node.js
-      uses: actions/setup-node@v4 # Updated action version
+      uses: actions/setup-node@v4
       with:
         node-version: "20"
         cache: ${{ steps.detect-package-manager.outputs.manager }}
@@ -67,8 +63,6 @@ jobs:
       name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
     steps:
-      # - name: Configure Pages
-      #   uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
