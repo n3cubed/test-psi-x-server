@@ -23,10 +23,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.x] # Updated Node.js version for React compatibility
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3 # Updated action version
@@ -49,10 +45,10 @@ jobs:
           exit 1
         fi
 
-    - name: Set up Node.js ${{ matrix.node-version }}
+    - name: Set up Node.js
       uses: actions/setup-node@v4 # Updated action version
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: "20"
         cache: ${{ steps.detect-package-manager.outputs.manager }}
 
     - name: Install dependencies
