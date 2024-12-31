@@ -28,6 +28,7 @@ jobs:
 
     - name: Detect package manager
       id: detect-package-manager
+      working-directory: ./app
       run: |
         if [ -f "${{ github.workspace }}/yarn.lock" ]; then
           echo "manager=yarn" >> $GITHUB_OUTPUT
@@ -52,8 +53,10 @@ jobs:
 
     - name: Install dependencies
       run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      working-directory: ./app
     - name: Build
       run: ${{ steps.detect-package-manager.outputs.runner }} npm run build
+      working-directory: ./app
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
