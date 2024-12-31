@@ -15,41 +15,32 @@ permissions:
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: "pages-deploy-main"
   cancel-in-progress: false
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [20.x] # Updated Node.js version for React compatibility
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3 # Updated action version
 
     - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3 # Updated action version
       with:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
       run: npm install
 
-    # - name: Run the tests and generate coverage report
-    #   run: npm test -- --coverage
-
-    # - name: Upload coverage to Codecov
-    #   uses: codecov/codecov-action@v1
-
     - name: Build
       run: npm run build
-        # Deployment job
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
@@ -57,11 +48,10 @@ jobs:
         path: ./build
 
   deploy:
+    runs-on: ubuntu-latest
     needs: build
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Configure Pages
         uses: actions/configure-pages@v4
